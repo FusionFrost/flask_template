@@ -1,1 +1,1 @@
-web: gunicorn app:wsgigit add .
+web: gunicorn app:wsgi
