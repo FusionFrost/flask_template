@@ -1,55 +1,69 @@
-# Application struct
+# Application structure
 
 ```
 .
-└── flask_app
-    ├── app
-    │   ├── extensions.py
+└── flask_template
+    ├── local
+    │   └── create_db_sqlite.py
+    ├── models
+    │   └── movie.py
+    ├── nginx
+    │   ├── Dockerfile
+    │   └── nginx.conf
+    ├── static
+    │   └── mymovies.css
+    ├── templates
+    │   ├── layout.html
+    │   ├── index.html
+    │   └── home.html
+    ├── views
     │   ├── __init__.py
-    │   ├── main
-    │   │   ├── __init__.py
-    │   │   └── routes.py
-    │   ├── models
-    │   │   ├── post.py
-    │   │   └── question.py
-    │   ├── posts
-    │   │   ├── __init__.py
-    │   │   └── routes.py
-    │   ├── questions
-    │   │   ├── __init__.py
-    │   │   └── routes.py
-    │   └── templates
-    │       ├── base.html
-    │       ├── index.html
-    │       ├── posts
-    │       │   ├── categories.html
-    │       │   └── index.html
-    │       └── questions
-    │           └── index.html
-    ├── app.db
-    └── config.py
+    │   ├── auth.py
+    │   └── movies.py
+    ├── .gitignore
+    ├── app.ini
+    ├── Docker-compose.yml
+    ├── Dockerfile
+    ├── makefile
+    ├── Procfile
+    ├── readme.md
+    ├── requirements.txt
+    ├── server.py
+    ├── settings.py
+    └── wsgi.py
+```
+# Flask + Gunicorn
+
+## Create Heroku app
+flask-template-app
+```
+# Настройка конфигурационного файла
+# В файле Procfile вписать
+web: gunicorn wsgi:app port:8080
+ 
+wsgi - это файл, app - приложение
+
+# Авторизация 
+heroku login
+heroku git:remote -a flask-template-movie
 ```
 
+## Deploy in Heroku
+```
+git add .  
+git commit -am "fix"  
+git push heroku master
+
+# Для чтения логов
+heroku logs --tail 
+
+```
 
 
 # Flask + WSGI + Nginx 
 Docker-compose with 2 containers
 (Flask app + WSGI) and Nginx server 
 
-
-## Deploy in Heroku as a container
-flask-template-app
 ```
-heroku login
-docker login --username=<username> --password=<password>
-heroku container:login
-sudo heroku container:push web --app flask-template-app
-sudo heroku container:release web ca--app flask-template-app
+docker-compose -f Docker-compose.yml -p flask_template up -d --build
 ```
-
-## Deploy in Heroku with git
-
-
-# Flask + gunicorn
-App also can run only with Flask+gunicorn. 
-Need only add to file **procfile** this: `web: gunicorn app:wsgi`
